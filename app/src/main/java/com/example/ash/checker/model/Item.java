@@ -5,4 +5,6 @@ package com.example.ash.checker.model;
  */
 
 public interface Item {
+
+    boolean isTask();
 }

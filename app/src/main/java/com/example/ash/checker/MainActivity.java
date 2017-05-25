@@ -15,7 +15,10 @@ import android.widget.Toast;
 
 import com.example.ash.checker.adapter.TabAdapter;
 import com.example.ash.checker.dialog.AddignTaskDialogFragment;
+import com.example.ash.checker.fragment.CurrentTaskFragment;
+import com.example.ash.checker.fragment.DoneTaskFragment;
 import com.example.ash.checker.fragment.SplashFragment;
+import com.example.ash.checker.model.ModelTask;
 
 public class MainActivity extends AppCompatActivity
         implements AddignTaskDialogFragment.AddingTaskListener {
@@ -23,6 +26,11 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager;
 
     PreferenceHelper preferenceHelper;
+
+    TabAdapter tabAdapter;
+
+    CurrentTaskFragment currentTaskFragment;
+    DoneTaskFragment doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
 
-        TabAdapter tabAdapter = new TabAdapter(fragmentManager, 2);
+        tabAdapter = new TabAdapter(fragmentManager, 2);
 
         viewPager.setAdapter(tabAdapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -115,6 +123,9 @@ public class MainActivity extends AppCompatActivity
 
         });
 
+        currentTaskFragment = (CurrentTaskFragment) tabAdapter.getItem(TabAdapter.CURRENT_TASK_FRAGMENT_POSITION);
+        doneTaskFragment = (DoneTaskFragment) tabAdapter.getItem(TabAdapter.DONE_TASK_FRAGMENT_POSITION);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,8 +137,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskAdded() {
-        Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
+    public void onTaskAdded(ModelTask newTask) {
+        currentTaskFragment.addTask(newTask);
     }
 
     @Override
