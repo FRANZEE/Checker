@@ -14,14 +14,16 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.ash.checker.adapter.TabAdapter;
-import com.example.ash.checker.dialog.AddignTaskDialogFragment;
+import com.example.ash.checker.dialog.AddingTaskDialogFragment;
 import com.example.ash.checker.fragment.CurrentTaskFragment;
 import com.example.ash.checker.fragment.DoneTaskFragment;
 import com.example.ash.checker.fragment.SplashFragment;
+import com.example.ash.checker.fragment.TaskFragment;
 import com.example.ash.checker.model.ModelTask;
 
 public class MainActivity extends AppCompatActivity
-        implements AddignTaskDialogFragment.AddingTaskListener {
+        implements AddingTaskDialogFragment.AddingTaskListener,
+        CurrentTaskFragment.OnTaskDoneListener, DoneTaskFragment.OnTaskRestoreListener {
 
     FragmentManager fragmentManager;
 
@@ -29,8 +31,8 @@ public class MainActivity extends AppCompatActivity
 
     TabAdapter tabAdapter;
 
-    CurrentTaskFragment currentTaskFragment;
-    DoneTaskFragment doneTaskFragment;
+    TaskFragment currentTaskFragment;
+    TaskFragment doneTaskFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +132,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogFragment addingTaskDialogFragment = new AddignTaskDialogFragment();
+                DialogFragment addingTaskDialogFragment = new AddingTaskDialogFragment();
                 addingTaskDialogFragment.show(fragmentManager, "AddingTaskDialogFragment");
             }
         });
@@ -144,5 +146,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onTaskAddingCancel() {
         Toast.makeText(this, "Task cancelled", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onTaskDone(ModelTask task) {
+        doneTaskFragment.addTask(task);
+    }
+
+    @Override
+    public void onTaskRestore(ModelTask task) {
+        currentTaskFragment.addTask(task);
     }
 }

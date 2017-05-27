@@ -29,7 +29,7 @@ import java.util.Calendar;
  * Created by ash on 17.05.17.
  */
 
-public class AddignTaskDialogFragment extends DialogFragment {
+public class AddingTaskDialogFragment extends DialogFragment {
 
     private AddingTaskListener addingTaskListener;
 
@@ -77,6 +77,9 @@ public class AddignTaskDialogFragment extends DialogFragment {
 
         builder.setView(container);
 
+        final ModelTask task = new ModelTask();
+
+
         ArrayAdapter<String> priorityAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_dropdown_item, ModelTask.PRIORITY_LEVELS);
 
@@ -85,7 +88,7 @@ public class AddignTaskDialogFragment extends DialogFragment {
         spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                task.setPriority
+                task.setPriority(position);
             }
 
             @Override
@@ -94,7 +97,6 @@ public class AddignTaskDialogFragment extends DialogFragment {
             }
         });
 
-        final ModelTask task = new ModelTask();
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 1);
 
@@ -159,6 +161,7 @@ public class AddignTaskDialogFragment extends DialogFragment {
                 if (etDate.length() != 0 || etTime.length() != 0){
                     task.setDate(calendar.getTimeInMillis());
                 }
+                task.setStatus(ModelTask.STATUS_CURRENT);
                 addingTaskListener.onTaskAdded(task);
                 dialog.dismiss();
             }
